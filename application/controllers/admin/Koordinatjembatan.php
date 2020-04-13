@@ -36,16 +36,16 @@ function simpandaftarkoordinatjembatan(){
         show_404();
     }else{
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('id_jembatan', 'Data jembatan', 'trim|required');
+        $this->form_validation->set_rules('jembatan_id', 'Data jembatan', 'trim|required');
         if ($this->form_validation->run()==false) {
             $status = 'error';
             $msg = validation_errors();
         }else{
-            if ($this->model_koordinatjembatan->getbyidjembatan($this->input->post('id_jembatan'))->num_rows()!=null) {
+            if ($this->Model_koordinatjembatan->getbyidjembatan($this->input->post('jembatan_id'))->num_rows()!=null) {
                 $status = 'error';
                 $msg = 'marker jembatan yang bersangkutan sudah ada, hapus terlebih dahulu';
             }else{
-                if ($this->model_koordinatjembatan->create()) {
+                if ($this->Model_koordinatjembatan->create()) {
                     $status = 'success';
                     $msg = 'data berhasil disimpan';
                 }else{
@@ -61,7 +61,7 @@ function hapusmarkerjembatan(){
     if (!$this->input->is_ajax_request()) {
         show_404();
     }else{
-        if ($this->model_koordinatjembatan->deletebyidjembatan($this->input->post('id_jembatan'))) {
+        if ($this->model_koordinatjembatan->deletebyidjembatan($this->input->post('jembatan_id'))) {
             $status = 'success';
             $msg = 'data berhasil dihapus';
         }else{

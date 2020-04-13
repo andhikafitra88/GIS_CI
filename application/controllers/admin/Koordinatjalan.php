@@ -89,16 +89,16 @@ function simpandaftarkoordinatjalan(){
         show_404();
     }else{
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('id_jalan', 'Data Jalan', 'trim|required');
+        $this->form_validation->set_rules('jalan_id', 'Data Jalan', 'trim|required');
         if ($this->form_validation->run()==false) {
             $status = 'error';
             $msg = validation_errors();
         }else{
-            if ($this->model_koordinatjalan->getbyidjalan($this->input->post('id_jalan'))->num_rows()!=null) {
+            if ($this->Model_koordinatjalan->getbyidjalan($this->input->post('jalan_id'))->num_rows()!=null) {
                 $status = 'error';
                 $msg = 'polyline jalan yang bersangkutan sudah ada, hapus terlebih dahulu';
             }else{
-                if ($this->model_koordinatjalan->create()) {
+                if ($this->Model_koordinatjalan->create()) {
                     $status = 'success';
                     $msg = 'data berhasil disimpan';
                     $this->cart->destroy();
@@ -115,7 +115,7 @@ function hapuspolylinejalan(){
     if (!$this->input->is_ajax_request()) {
         show_404();
     }else{
-        if ($this->model_koordinatjalan->deletebyidjalan($this->input->post('id_jalan'))) {
+        if ($this->model_koordinatjalan->deletebyidjalan($this->input->post('jalan_id'))) {
             $status = 'success';
             $msg = 'data berhasil dihapus';
         }else{
@@ -129,9 +129,9 @@ function viewpolylinejalan(){
     if (!$this->input->is_ajax_request()) {
         show_404();
     }else{
-        if ($this->model_koordinatjalan->getbyidjalan($this->input->post('id_jalan'))->num_rows()!=null){
+        if ($this->model_koordinatjalan->getbyidjalan($this->input->post('id_koordinatjalan'))->num_rows()!=null){
             $status = 'success';
-            $msg = $this->model_koordinatjalan->getbyidjalan($this->input->post('id_jalan'))->result();
+            $msg = $this->model_koordinatjalan->getbyidjalan($this->input->post('id_koordinatjalan'))->result();
             $datajalan = $this->model_jalan->read($this->input->post('id_jalan'))->result();
         }else{
             $status = 'error';

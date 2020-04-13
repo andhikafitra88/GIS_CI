@@ -1,9 +1,8 @@
 <!--script google map-->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAoCaD__6xurXTvz-iCH0RhYfXgAnVH9w&callback=initMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAoCaD__6xurXTvz-iCH0RhYfXgAnVH9w"></script>
 <script>
 $(document).on('click','#clearmap',clearmap)
+//$('#simpandaftarkoordinatjalan').on("click", simpandaftarkoordinatjalan)
 .on('click','#simpandaftarkoordinatjalan',simpandaftarkoordinatjalan)
 .on('click','#hapuspolylinejalan',hapuspolylinejalan)
 .on('click','#viewpolylinejalan',viewpolylinejalan);
@@ -34,7 +33,7 @@ $(document).on('click','#clearmap',clearmap)
           var lng = event.latLng.lng();
           var datakoordinat = {'latitude':lat, 'longitude':lng};
           $.ajax({
-              url : '<?php echo site_url("admin/tambahkoordinatjalan") ?>',
+              url : '<?php echo site_url("admin/Koordinatjalan/tambahkoordinatjalan") ?>',
               data : datakoordinat,
               dataType : 'json',
               type : 'POST',
@@ -74,7 +73,7 @@ $(document).on('click','#clearmap',clearmap)
     function clearmap(e){
         e.preventDefault();
         $.ajax({
-            url : '<?php echo site_url("admin/hapusdaftarkoordinatjalan") ?>',
+            url : '<?php echo site_url("admin/Koordinatjalan/hapusdaftarkoordinatjalan") ?>',
             dataType : 'json',
             type : 'POST',
             success : function(data,status){
@@ -104,10 +103,10 @@ $(document).on('click','#clearmap',clearmap)
     }
     function simpandaftarkoordinatjalan(e){
         e.preventDefault();
-        var datakoordinat = {'id_jalan':$('#id_jalan').val()};
+        var datakoordinat = {'jalan_id':$('#id_jalan').val()};
         console.log(datakoordinat);
         $.ajax({
-            url : '<?php echo site_url("admin/simpandaftarkoordinatjalan") ?>',
+            url : '<?php echo site_url("admin/Koordinatjalan/simpandaftarkoordinatjalan") ?>',
             dataType : 'json',
             data : datakoordinat,
             type : 'POST',
@@ -128,7 +127,7 @@ $(document).on('click','#clearmap',clearmap)
         var datakoordinat = {'id_jalan':$(this).data('iddatajalan')};
         console.log(datakoordinat);
         $.ajax({
-            url : '<?php echo site_url("admin/hapuspolylinejalan") ?>',
+            url : '<?php echo site_url("admin/Koordinatjalan/hapuspolylinejalan") ?>',
             data : datakoordinat,
             dataType : 'json',
             type : 'POST',
@@ -145,10 +144,10 @@ $(document).on('click','#clearmap',clearmap)
     }
     function viewpolylinejalan(e){
         e.preventDefault();
-        var datakoordinat = {'id_jalan':$(this).data('iddatajalan')};
+        var datakoordinat = {'id_koordinatjalan':$(this).data('id_koordinatjalan')};
         console.log(datakoordinat);
         $.ajax({
-            url : '<?php echo site_url("admin/viewpolylinejalan") ?>',
+            url : '<?php echo site_url("admin/Koordinatjalan/viewpolylinejalan") ?>',
             data : datakoordinat,
             dataType : 'json',
             type : 'POST',
@@ -200,6 +199,7 @@ $(document).on('click','#clearmap',clearmap)
 
     google.maps.event.addDomListener(window, 'load', initialize);
 </script>
+
 <!--end script google map-->
 <div class="container">
     <div class="row">
@@ -274,14 +274,14 @@ $(document).on('click','#clearmap',clearmap)
                                     echo "</td>";
                                     echo "<td>";
                                     foreach ($itemkoordinatjalan->result() as $koordinat) {
-                                        if ($koordinat->id_jalan==$jalan->id_jalan) {
+                                        if ($koordinat->jalan_id==$jalan->id_jalan) {
                                             echo $koordinat->latitude."</br>";
                                         }
                                     }
                                     echo "</td>";
                                     echo "<td>";
                                     foreach ($itemkoordinatjalan->result() as $koordinat) {
-                                        if ($koordinat->id_jalan==$jalan->id_jalan) {
+                                        if ($koordinat->jalan_id==$jalan->id_jalan) {
                                             echo $koordinat->longitude."</br>";
                                         }
                                     }

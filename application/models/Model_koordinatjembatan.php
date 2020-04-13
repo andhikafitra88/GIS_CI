@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Model_koordinatjembatan extends CI_Model {
 
     public function create(){
-        $data = array('id_jembatan' => $this->input->post('id_jembatan'),
+        $data = array('jembatan_id' => $this->input->post('jembatan_id'),
             'latitude'=>$this->input->post('latitude'),
             'longitude'=>$this->input->post('longitude'));
         $query = $this->db->insert('tbl_koordinatjembatan', $data);
@@ -15,7 +15,7 @@ class Model_koordinatjembatan extends CI_Model {
         return $query;
     }
     public function getbyidjembatan($id){
-        $this->db->where('id_jembatan', $id);
+        $this->db->where('jembatan_id', $id);
         $query = $this->db->get('tbl_koordinatjembatan');
         return $query;
     }
@@ -25,7 +25,7 @@ class Model_koordinatjembatan extends CI_Model {
         return $query;
     }
     public function update(){
-        $data = array('id_jembatan'=>$this->input->post('id_jembatan'),
+        $data = array('jembatan_id'=>$this->input->post('jembatan_id'),
             'latitude'=>$this->input->post('latitude'),
             'longitude'=>$this->input->post('longitude'));
         $this->db->where('id_koordinatjembatan', $this->input->post('id_koordinatjembatan'));//mengupdate berdasarkan id_koordinatjembatan
@@ -38,7 +38,7 @@ class Model_koordinatjembatan extends CI_Model {
         return $query;
     }
     public function deletebyidjembatan($id){
-        $this->db->where('id_jembatan', $id);
+        $this->db->where('jembatan_id', $id);
         $query = $this->db->delete('tbl_koordinatjembatan');
         return $query;
     }

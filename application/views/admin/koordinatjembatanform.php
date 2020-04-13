@@ -58,10 +58,10 @@ $(document).on('click','#clearmap',clearmap)
 
     function simpandaftarkoordinatjembatan(e){
         e.preventDefault();
-        var datakoordinat = {'id_jembatan':$('#id_jembatan').val(),'latitude':$('#latitude').val(),'longitude':$('#longitude').val()};
+        var datakoordinat = {'jembatan_id':$('#id_jembatan').val(),'latitude':$('#latitude').val(),'longitude':$('#longitude').val()};
         console.log(datakoordinat);
         $.ajax({
-            url : '<?php echo site_url("admin/simpandaftarkoordinatjembatan") ?>',
+            url : '<?php echo site_url("admin/Koordinatjembatan/simpandaftarkoordinatjembatan") ?>',
             dataType : 'json',
             data : datakoordinat,
             type : 'POST',
@@ -80,7 +80,7 @@ $(document).on('click','#clearmap',clearmap)
         e.preventDefault();
         var datakoordinat = {'id_jembatan':$(this).data('iddatajembatan')};
         $.ajax({
-            url : '<?php echo site_url("admin/hapusmarkerjembatan") ?>',
+            url : '<?php echo site_url("admin/Koordinatjembatan/hapusmarkerjembatan") ?>',
             data : datakoordinat,
             dataType : 'json',
             type : 'POST',
@@ -99,7 +99,7 @@ $(document).on('click','#clearmap',clearmap)
         e.preventDefault();
         var datakoordinat = {'id_jembatan':$(this).data('iddatajembatan')};
         $.ajax({
-            url : '<?php echo site_url("admin/viewmarkerjembatan") ?>',
+            url : '<?php echo site_url("admin/koortdinatjembatan/viewmarkerjembatan") ?>',
             data : datakoordinat,
             dataType : 'json',
             type : 'POST',
@@ -207,14 +207,14 @@ $(document).on('click','#clearmap',clearmap)
                                     echo "</td>";
                                     echo "<td>";
                                     foreach ($itemkoordinatjembatan->result() as $koordinat) {
-                                        if ($koordinat->id_jembatan==$jembatan->id_jembatan) {
+                                        if ($koordinat->jembatan_id==$jembatan->id_jembatan) {
                                             echo $koordinat->latitude."</br>";
                                         }
                                     }
                                     echo "</td>";
                                     echo "<td>";
                                     foreach ($itemkoordinatjembatan->result() as $koordinat) {
-                                        if ($koordinat->id_jembatan==$jembatan->id_jembatan) {
+                                        if ($koordinat->jembatan_id==$jembatan->id_jembatan) {
                                             echo $koordinat->longitude."</br>";
                                         }
                                     }

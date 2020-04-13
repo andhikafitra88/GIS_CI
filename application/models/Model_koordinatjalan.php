@@ -5,7 +5,7 @@ class Model_koordinatjalan extends CI_Model {
 
     public function create(){
         foreach ($this->cart->contents() as $koordinat) {
-            $data = array('id_jalan' => $this->input->post('id_jalan'),
+            $data = array('jalan_id' => $this->input->post('jalan_id'),
                 'latitude'=>$koordinat['latitude'],
                 'longitude'=>$koordinat['longitude']);
             $query = $this->db->insert('tbl_koordinatjalan', $data);
@@ -17,7 +17,7 @@ class Model_koordinatjalan extends CI_Model {
         return $query;
     }
     public function getbyidjalan($id){
-        $this->db->where('id_jalan', $id);
+        $this->db->where('jalan_id', $id);
         $query = $this->db->get('tbl_koordinatjalan');//mengambil semua data koordinat jalan
         return $query;
     }
@@ -27,7 +27,7 @@ class Model_koordinatjalan extends CI_Model {
         return $query;
     }
     public function update(){
-        $data = array('id_jalan'=>$this->input->post('id_jalan'),
+        $data = array('jalan_id'=>$this->input->post('jalan_id'),
             'latitude'=>$this->input->post('latitude'),
             'longitude'=>$this->input->post('longitude'));
         $this->db->where('id_koordinatjalan', $this->input->post('id_koordinatjalan'));//mengupdate berdasarkan id_koordinatjalan
@@ -40,7 +40,7 @@ class Model_koordinatjalan extends CI_Model {
         return $query;
     }
     public function deletebyidjalan($id){
-        $this->db->where('id_jalan', $id);//menghapus berdasarkan id_koordinatjalan
+        $this->db->where('jalan_id', $id);//menghapus berdasarkan id_koordinatjalan
         $query = $this->db->delete('tbl_koordinatjalan');
         return $query;
     }
