@@ -45,6 +45,16 @@ class Model_koordinatjalan extends CI_Model {
         return $query;
     }
 
+    public function getData()
+     {
+          $this->db->select('tbl_jalan.namajalan,tbl_jalan.keterangan,tbl_koordinatjalan.latitude,tbl_koordinatjalan.longitude');
+          $this->db->join('tbl_koordinatjalan', 'tbl_jalan.id_jalan = tbl_koordinatjalan.jalan_id');
+          $this->db->from('tbl_jalan');
+
+          return $this->db->get();
+          
+     }
+
 }
 
 /* End of file model_koordinatjalan.php */

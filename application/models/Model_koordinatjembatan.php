@@ -43,6 +43,16 @@ class Model_koordinatjembatan extends CI_Model {
         return $query;
     }
 
+    public function getData()
+     {
+          $this->db->select('tbl_jembatan.namajembatan,tbl_jembatan.keterangan,tbl_koordinatjembatan.latitude,tbl_koordinatjembatan.longitude');
+          $this->db->join('tbl_koordinatjembatan', 'tbl_jembatan.id_jembatan = tbl_koordinatjembatan.jembatan_id');
+          $this->db->from('tbl_jembatan');
+
+          return $this->db->get();
+          
+     }
+
 }
 
 /* End of file model_koordinatjembatan.php */

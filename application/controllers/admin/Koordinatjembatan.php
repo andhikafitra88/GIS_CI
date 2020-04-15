@@ -1,5 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require('./application/third_party/phpoffice/vendor/autoload.php');
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class KoordinatJembatan extends CI_Controller{
     public function __construct()
     {
@@ -61,7 +64,7 @@ function hapusmarkerjembatan(){
     if (!$this->input->is_ajax_request()) {
         show_404();
     }else{
-        if ($this->model_koordinatjembatan->deletebyidjembatan($this->input->post('jembatan_id'))) {
+        if ($this->Model_koordinatjembatan->deletebyidjembatan($this->input->post('jembatan_id'))) {
             $status = 'success';
             $msg = 'data berhasil dihapus';
         }else{
@@ -75,10 +78,10 @@ function viewmarkerjembatan(){
     if (!$this->input->is_ajax_request()) {
         show_404();
     }else{
-        if ($this->model_koordinatjembatan->getbyidjembatan($this->input->post('id_jembatan'))->num_rows()!=null){
+        if ($this->Model_koordinatjembatan->getbyidjembatan($this->input->post('jembatan_id'))->num_rows()!=null){
             $status = 'success';
-            $msg = $this->model_koordinatjembatan->getbyidjembatan($this->input->post('id_jembatan'))->result();
-            $datajembatan = $this->model_jembatan->read($this->input->post('id_jembatan'))->result();
+            $msg = $this->Model_koordinatjembatan->getbyidjembatan($this->input->post('jembatan_id'))->result();
+            $datajembatan = $this->Model_jembatan->read($this->input->post('id_jembatan'))->result();
         }else{
             $status = 'error';
             $msg = 'data tidak ditemukan';
@@ -88,5 +91,44 @@ function viewmarkerjembatan(){
     }
 }
 //end crud koordinat jembatan
+
+public function export()
+     {
+          $semua_jembatan = $this->Model_koordinatjembatan->getData()->result();
+
+          $spreadsheet = new Spreadsheet;
+
+          $spreadsheet->setActiveSheetIndex(0)
+                      ->setCellValue('A1', 'No')
+                      ->setCellValue('B1', 'Nama Jembatan')
+                      ->setCellValue('C1', 'Keterangan')
+                      ->setCellValue('D1', 'Latitude')
+                      ->setCellValue('E1', 'Longitude');
+
+          $kolom = 2;
+          $nomor = 1;
+          foreach($semua_jembatan as $jembatan) {
+
+               $spreadsheet->setActiveSheetIndex(0)
+                           ->setCellValue('A' . $kolom, $nomor)
+                           ->setCellValue('B' . $kolom, $jembatan->namajembatan)
+                           ->setCellValue('C' . $kolom, $jembatan->keterangan)
+                           ->setCellValue('D' . $kolom, $jembatan->latitude)
+                           ->setCellValue('E' . $kolom, $jembatan->longitude);
+
+               $kolom++;
+               $nomor++;
+
+          }
+
+          $writer = new Xlsx($spreadsheet);
+
+          header('Content-Type: application/vnd.ms-excel');
+	  header('Content-Disposition: attachment;filename="Data Jembatan.xlsx"');
+	  header('Cache-Control: max-age=0');
+
+	  $writer->save('php://output');
+     }
+
 
 }

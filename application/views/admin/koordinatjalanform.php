@@ -124,7 +124,7 @@ $(document).on('click','#clearmap',clearmap)
     }
     function hapuspolylinejalan(e){
         e.preventDefault();
-        var datakoordinat = {'id_jalan':$(this).data('iddatajalan')};
+        var datakoordinat = {'jalan_id':$(this).data('iddatajalan')};
         console.log(datakoordinat);
         $.ajax({
             url : '<?php echo site_url("admin/Koordinatjalan/hapuspolylinejalan") ?>',
@@ -144,7 +144,7 @@ $(document).on('click','#clearmap',clearmap)
     }
     function viewpolylinejalan(e){
         e.preventDefault();
-        var datakoordinat = {'id_koordinatjalan':$(this).data('id_koordinatjalan')};
+        var datakoordinat = {'jalan_id':$(this).data('iddatajalan')};
         console.log(datakoordinat);
         $.ajax({
             url : '<?php echo site_url("admin/Koordinatjalan/viewpolylinejalan") ?>',
@@ -159,10 +159,7 @@ $(document).on('click','#clearmap',clearmap)
                         var lat = n["latitude"];
                         var lng = n["longitude"];
                         console.log(m,n);
-                        $.each(data.datajalan,function(k,v){
-                            createpolylinedatajalan(data.msg,v['namajalan'],lat,lng);
-                        })
-                        return false;
+                        createpolylinedatajalan(data.msg,n['namajalan'],lat,lng);
                     })
                     //end load polyline
                 }else{
@@ -193,9 +190,12 @@ $(document).on('click','#clearmap',clearmap)
         strokeOpacity: 1.0,
         });
 
+        var map = new google.maps.Map(document.getElementById('map-canvas'),
+          mapOptions);
         pathKoordinat.setMap(map);
 
     }
+    
 
     google.maps.event.addDomListener(window, 'load', initialize);
 </script>
@@ -260,6 +260,7 @@ $(document).on('click','#clearmap',clearmap)
                         <th>Latitude</th>
                         <th>Longitude</th>
                         <th></th>
+                        <a href="<?php echo site_url('admin/koordinatjalan/export'); ?>">Download Data</a>
                         <tbody id="daftarkoordinatjalan">
                             <?php
                             if ($itemkoordinatjalan->num_rows()!=null) {

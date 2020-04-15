@@ -78,7 +78,7 @@ $(document).on('click','#clearmap',clearmap)
     }
     function hapusmarkerjembatan(e){
         e.preventDefault();
-        var datakoordinat = {'id_jembatan':$(this).data('iddatajembatan')};
+        var datakoordinat = {'jembatan_id':$(this).data('iddatajembatan')};
         $.ajax({
             url : '<?php echo site_url("admin/Koordinatjembatan/hapusmarkerjembatan") ?>',
             data : datakoordinat,
@@ -97,9 +97,9 @@ $(document).on('click','#clearmap',clearmap)
     }
     function viewmarkerjembatan(e){
         e.preventDefault();
-        var datakoordinat = {'id_jembatan':$(this).data('iddatajembatan')};
+        var datakoordinat = {'jembatan_id':$(this).data('iddatajembatan')};
         $.ajax({
-            url : '<?php echo site_url("admin/koortdinatjembatan/viewmarkerjembatan") ?>',
+            url : '<?php echo site_url("admin/koordinatjembatan/viewmarkerjembatan") ?>',
             data : datakoordinat,
             dataType : 'json',
             type : 'POST',
@@ -108,12 +108,14 @@ $(document).on('click','#clearmap',clearmap)
                     clearmap(e);
                     //load marker
                     $.each(data.msg,function(m,n){
+                        $('#latitude').val(n['latitude']);
+                        $('#longitude').val(n['longitude']);
+                        var lot = parseFloat(n["latitude"]);
+                        var lmg = parseFloat(n["longitude"]);
                         var myLatLng = {lat: parseFloat(n["latitude"]), lng: parseFloat(n["longitude"])};
                         console.log(m,n);
-                        $.each(data.datajembatan,function(k,v){
-                            addMarker(v['namajembatan'],myLatLng);
-                        })
-                        return false;
+                        addMarker(n['namajembatan'],myLatLng,lot,lmg);
+
                     })
                     //end load marker
                 }else{
@@ -123,13 +125,18 @@ $(document).on('click','#clearmap',clearmap)
         })
     }
     // Menampilkan marker lokasi jembatan
-    function addMarker(nama,location) {
+    function addMarker(nama,location,lat,lon) {
+        var mapOptions = {
+        zoom: 14,
+        center: location
+        }
+var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
         var marker = new google.maps.Marker({
             position: location,
             map: map,
             title : nama
         });
-        markers.push(marker);
+        marker.setMap(map);
     }
 
     google.maps.event.addDomListener(window, 'load', initialize);
@@ -187,6 +194,7 @@ $(document).on('click','#clearmap',clearmap)
             <div class="panel panel-primary">
                 <div class="panel-heading"><span class="glyphicon glyphicon-th-list"></span> Daftar Koordinat marker Data jembatan</div>
                 <div class="panel-body" style="min-height:400px">
+                <a href="<?php echo site_url('admin/koordinatjembatan/export'); ?>">Download Data</a>
                     <table class="table">
                         <th>No</th>
                         <th>Data jembatan</th>

@@ -1,5 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require('./application/third_party/phpoffice/vendor/autoload.php');
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class Koordinatjalan extends CI_Controller{
     public function __construct()
     {
@@ -115,7 +118,7 @@ function hapuspolylinejalan(){
     if (!$this->input->is_ajax_request()) {
         show_404();
     }else{
-        if ($this->model_koordinatjalan->deletebyidjalan($this->input->post('jalan_id'))) {
+        if ($this->Model_koordinatjalan->deletebyidjalan($this->input->post('jalan_id'))) {
             $status = 'success';
             $msg = 'data berhasil dihapus';
         }else{
@@ -129,10 +132,10 @@ function viewpolylinejalan(){
     if (!$this->input->is_ajax_request()) {
         show_404();
     }else{
-        if ($this->model_koordinatjalan->getbyidjalan($this->input->post('id_koordinatjalan'))->num_rows()!=null){
+        if ($this->Model_koordinatjalan->getbyidjalan($this->input->post('jalan_id'))->num_rows()!=null){
             $status = 'success';
-            $msg = $this->model_koordinatjalan->getbyidjalan($this->input->post('id_koordinatjalan'))->result();
-            $datajalan = $this->model_jalan->read($this->input->post('id_jalan'))->result();
+            $msg = $this->Model_koordinatjalan->getbyidjalan($this->input->post('jalan_id'))->result();
+            $datajalan = $this->Model_jalan->read($this->input->post('id_jalan'))->result();
         }else{
             $status = 'error';
             $msg = 'data tidak ditemukan';
@@ -143,6 +146,43 @@ function viewpolylinejalan(){
 }
 //end crud koordinat jalan
 
+public function export()
+     {
+          $semua_jembatan = $this->Model_koordinatjalan->getData()->result();
+
+          $spreadsheet = new Spreadsheet;
+
+          $spreadsheet->setActiveSheetIndex(0)
+                      ->setCellValue('A1', 'No')
+                      ->setCellValue('B1', 'Nama Jalan')
+                      ->setCellValue('C1', 'Keterangan')
+                      ->setCellValue('D1', 'Latitude')
+                      ->setCellValue('E1', 'Longitude');
+
+          $kolom = 2;
+          $nomor = 1;
+          foreach($semua_jembatan as $jembatan) {
+
+               $spreadsheet->setActiveSheetIndex(0)
+                           ->setCellValue('A' . $kolom, $nomor)
+                           ->setCellValue('B' . $kolom, $jembatan->namajalan)
+                           ->setCellValue('C' . $kolom, $jembatan->keterangan)
+                           ->setCellValue('D' . $kolom, $jembatan->latitude)
+                           ->setCellValue('E' . $kolom, $jembatan->longitude);
+
+               $kolom++;
+               $nomor++;
+
+          }
+
+          $writer = new Xlsx($spreadsheet);
+
+          header('Content-Type: application/vnd.ms-excel');
+	  header('Content-Disposition: attachment;filename="Data Jalan.xlsx"');
+	  header('Cache-Control: max-age=0');
+
+	  $writer->save('php://output');
+     }
 
 }
 
